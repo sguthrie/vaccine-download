@@ -10,6 +10,7 @@ python = ">=3.8.0"
 bs4 = "^0.0.1"
 requests = "^2.25.1"
 openpyxl = "^3.0.6"
+airtable-python-wrapper = "^0.15.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
