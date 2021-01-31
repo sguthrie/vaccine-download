@@ -1,5 +1,5 @@
 # vaccine-download
-Pull information from MA government vaccine website and format into CSV
+Pull information from MA government vaccine website and upload to Airtable
 
 ## Installing and Running
 This project uses [poetry](https://python-poetry.org/docs/) as a package manager. Once it's installed, run the following to install dependencies in a poetry
