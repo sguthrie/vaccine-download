@@ -83,6 +83,7 @@ def get_curr_ma_data(vaccination_site_url, airtable_unique_val):
 def get_curr_airtable_data_and_update_list(table, airtable_unique_val, curr_ma_data):
     curr_airtable_data = {}
     to_update = defaultdict(list)
+    up_to_date = []
     table_results = table.get_all()
     for entry in table_results:
         entry_name = entry['fields'][airtable_unique_val].strip()
@@ -95,4 +96,6 @@ def get_curr_airtable_data_and_update_list(table, airtable_unique_val, curr_ma_d
                     to_update[entry_name].append(header)
                 elif entry['fields'][header] != curr_ma_data[entry_name][header]:
                     to_update[entry_name].append(header)
-    return curr_airtable_data, to_update
+            if entry_name not in to_update:
+                up_to_date.append(entry_name)
+    return curr_airtable_data, to_update, up_to_date

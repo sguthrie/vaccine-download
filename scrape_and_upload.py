@@ -51,10 +51,11 @@ args = parser.parse_args()
 vaccination_site_url = get_download_link(args.ma_url, args.link_match_checks)
 curr_ma_data = get_curr_ma_data(vaccination_site_url, args.airtable_unique_key_name)
 table = Airtable(*args.airtable, os.environ['AIRTABLE_API_TOKEN'])
-curr_airtable_data, to_update = get_curr_airtable_data_and_update_list(
+curr_airtable_data, to_update, up_to_date = get_curr_airtable_data_and_update_list(
     table, args.airtable_unique_key_name, curr_ma_data
 )
 
+print(f'{len(to_update)} entries to update')
 for entry_name in to_update:
     values = {}
     for field in to_update[entry_name]:
@@ -62,6 +63,10 @@ for entry_name in to_update:
     print(table.update(curr_airtable_data[entry_name]['id'], values))
     time.sleep(table.API_LIMIT)
 
-entries_to_add = [entry for entry_name, entry in curr_ma_data.items() if entry_name not in to_update]
+entries_to_add = []
+for entry_name, entry in curr_ma_data.items():
+    if entry_name not in to_update and entry_name not in up_to_date:
+        entries_to_add.append(entry)
 
+print(f'{len(entries_to_add)} entries to add. {len(up_to_date)} up to date')
 print(table.batch_insert(entries_to_add))
